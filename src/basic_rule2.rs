@@ -22,8 +22,6 @@ impl Grid {
     // false -> 何もなかった
     fn apply_some_rule(&mut self) -> bool {
         if let Some(mut fixed_cell) = self.find_only_number_in_cell() {
-            // println!("find_only_number_in_cell: #{:?}, #{:?}, #{:?}", fixed_cell.cell.coodinate.x, fixed_cell.cell.coodinate.y, fixed_cell.number);
-
             fixed_cell.cell.number = fixed_cell.number.clone();
             fixed_cell.cell.possible_numbers = vec![];
 
@@ -32,8 +30,6 @@ impl Grid {
         }
 
         if let Some(mut fixed_cell) = self.find_only_cell_in_block() {
-           // println!("find_only_cell_in_block: #{:?}, #{:?}, #{:?}", fixed_cell.cell.coodinate.x, fixed_cell.cell.coodinate.y, fixed_cell.number);
-
             fixed_cell.cell.number = fixed_cell.number.clone();
             fixed_cell.cell.possible_numbers = vec![];
 
@@ -41,7 +37,6 @@ impl Grid {
             return true;
         }
 
-        //println!("===false");
         false
     }
 
@@ -189,7 +184,6 @@ impl Grid {
                 row_cellses[x_index][y_index] = cell.clone();
             }
         }
-        // println!("{:?}", row_cellses[0]);
 
         for (index, cells) in row_cellses.iter().enumerate() {
             blocks[index] = Block(cells.clone());
@@ -215,7 +209,6 @@ impl Grid {
         for y in self.0.iter() {
             for x in y.iter() {
                 if x.possible_numbers.len() == 1 {
-                    // println!("find! find_only_number_in_cell: x: #{:?}, y: #{:?}, num: #{:?}", x.coodinate.x, x.coodinate.y, x.possible_numbers);
                     return Some(FixedCell {
                         cell: x.clone(),
                         number: x.possible_numbers[0],
@@ -469,7 +462,6 @@ fn build_cells_by_number(numbers: [[i32; 9]; 9]) -> [[Cell; 9]; 9] {
 
 fn print_cells(cells: Vec<Cell>) {
     for cell in cells.iter() {
-        //println!("{:?}", cell.coodinate);
         println!(
             "{:?}, {:?}: {:?}",
             cell.coodinate.x, cell.coodinate.y, cell.number
@@ -490,46 +482,15 @@ fn main() {
         [0, 2, 0, 0, 0, 0, 0, 8, 0],
     ];
 
-    let numbers2 = [
-        [4, 8, 0, 0, 0, 0, 0, 1, 0],
-        [1, 0, 0, 2, 0, 0, 9, 4, 0],
-        [0, 0, 7, 1, 0, 4, 0, 0, 3],
-        [3, 4, 0, 0, 1, 0, 0, 9, 0],
-        [0, 0, 0, 7, 4, 2, 0, 0, 1],
-        [0, 6, 1, 0, 8, 0, 0, 0, 4],
-        [9, 0, 0, 4, 0, 0, 1, 0, 0],
-        [0, 1, 4, 0, 0, 3, 0, 0, 5],
-        [0, 2, 0, 0, 0, 1, 4, 8, 9],
-    ];
-
     // 参照が必要なところをマークする
     let cells = build_cells_by_number(numbers);
-    // 参照を取ってこないとだめ。
-    // https://chatgpt.com/c/8b340753-a08b-4bfc-bbae-18f183c64e82
-    // let n = cells[0][0]; // 構造体の配列をインデックス参照はできない
     let mut grid = Grid(cells.clone());
-    let cell1s = grid.get_row_empty_cells(cells[0][0].clone()); // Copy の Cell を渡す
-                                                                // print_cells(cell1s);
-
-    let cell2s = grid.get_column_empty_cells(cells[0][0].clone());
-    //print_cells(cell2s);
-
-    let cell3s = grid.get_squre_empty_cells(cells[0][0].clone());
 
     grid.initial_propagate();
 
-    //let blocks = grid.get_square_blocks();
-    // println!("{:?}", blocks);
-    /*for block in blocks {
-        block.print_numbers();
-        println!("");
-    }*/
-   // println!("{:?}", grid.find_only_cell_in_block());
-
-    solve(grid); // ここでどこかにいっちゃったので、表示するには参照を渡さないとだめ
+    solve(grid);
 }
 
-// 🌟ループさすところから。できたかも。
 fn solve(mut grid: Grid) -> bool {
     grid.print();
     if grid.is_complete() {
