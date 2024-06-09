@@ -192,7 +192,6 @@ impl Grid {
     }
 
     // 横一列のCell
-    // あってるぽい！
     fn get_row_blocks(&self) -> [Block; 9] {
         let mut blocks: [Block; 9] = Default::default();
 
