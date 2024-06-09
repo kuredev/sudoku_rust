@@ -11,6 +11,9 @@ edition = "2021"
 name = "main"
 path = "src/main.rs"
 
+[[bin]]
+name = "basic_rule"
+path = "src/basic_rule.rs"
 
 [[bin]]
 name = "basic_rule2"
